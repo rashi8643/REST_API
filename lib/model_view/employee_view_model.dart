@@ -1,19 +1,10 @@
-import 'package:rest_api_employee/model/employee_model.dart';
+import 'package:rest_api_employee/model/object_box_entity_model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'employee_view_model.g.dart';
 
-class FetchDataViewModel {
-  final FetchDataRepository repository;
-  FetchDataViewModel({required this.repository});
-
-  Future<List<DatasModel>> getDatas() async {
-    return repository.getData();
-  }
-}
-
-FetchDataRepository fetchDataRepository = FetchDataRepository();
+EmployeeObjectBoxRepository repository = EmployeeObjectBoxRepository();
 @riverpod
-Future<List<DatasModel>> fetchData(FetchDataRef ref) async {
-  return await fetchDataRepository.getData();
+Future<List<ObjectboxEntityModel>> fetchData(FetchDataRef ref) async {
+  return await repository.getData();
 }

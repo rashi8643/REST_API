@@ -22,57 +22,54 @@ class HomePage extends ConsumerWidget {
             const Padding(
               padding: EdgeInsets.all(16),
               child: Text(
-                'Employee Dtails',
+                'Employee Details',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ),
             switch (ref.watch(fetchDataProvider)) {
-              AsyncData(:final value) => SizedBox(
-                  height: MediaQuery.sizeOf(context).height,
-                  child: ListView.builder(
-                    itemCount: value.length,
-                    physics: const ClampingScrollPhysics(),
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 4,
-                        ),
-                        child: Card(
-                          child: ListTile(
-                            leading: const CircleAvatar(
-                              radius: 26,
-                              backgroundColor: Colors.grey,
-                              backgroundImage:
-                                  AssetImage('assets/images/profile.png'),
-                            ),
-                            title: Text(value[index].employeeName),
-                            subtitle: Row(
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    'Salary : ${value[index].employeeSalary.toString()}',
-                                  ),
+              AsyncData(:final value) => ListView.builder(
+                  itemCount: value.length,
+                  physics: const ClampingScrollPhysics(),
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 4,
+                      ),
+                      child: Card(
+                        child: ListTile(
+                          leading: const CircleAvatar(
+                            radius: 26,
+                            backgroundColor: Colors.grey,
+                            backgroundImage:
+                                AssetImage('assets/images/profile.png'),
+                          ),
+                          title: Text(value[index].employeeName!),
+                          subtitle: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  'Salary : ${value[index].employeeSalary.toString()}',
                                 ),
-                                Expanded(
-                                  child: Text(
-                                    'Age : ${value[index].employeeAge.toString()}',
-                                  ),
+                              ),
+                              Expanded(
+                                child: Text(
+                                  'Age : ${value[index].employeeAge.toString()}',
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
-                      );
-                    },
-                  ),
+                      ),
+                    );
+                  },
                 ),
               AsyncError() => const Center(
                   child: Text('Somthing Wrong'),
                 ),
               _ => const Center(
-                  child: CircleAvatar(),
+                  child: CircularProgressIndicator(),
                 ),
             }
           ],
