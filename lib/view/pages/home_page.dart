@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rest_api_employee/model_view/employee_view_model.dart';
+import 'package:rest_api_employee/view/widgets/bottom_sheet_widget.dart';
 
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
@@ -26,7 +27,7 @@ class HomePage extends ConsumerWidget {
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ),
-            switch (ref.watch(fetchDataProvider)) {
+            switch (ref.watch(dataProvider(context))) {
               AsyncData(:final value) => ListView.builder(
                   itemCount: value.length,
                   physics: const ClampingScrollPhysics(),
@@ -53,12 +54,20 @@ class HomePage extends ConsumerWidget {
                                   'Salary : ${value[index].employeeSalary.toString()}',
                                 ),
                               ),
-                              Expanded(
-                                child: Text(
-                                  'Age : ${value[index].employeeAge.toString()}',
-                                ),
+                              Text(
+                                'Age : ${value[index].employeeAge.toString()}',
                               ),
                             ],
+                          ),
+                          trailing: IconButton(
+                            onPressed: () {
+                              ref
+                                  .read(dataProvider(context).notifier)
+                                  .deleteData(value[index]);
+                            },
+                            icon: const Icon(
+                              Icons.delete,
+                            ),
                           ),
                         ),
                       ),
@@ -66,7 +75,7 @@ class HomePage extends ConsumerWidget {
                   },
                 ),
               AsyncError() => const Center(
-                  child: Text('Somthing Wrong'),
+                  child: Text('Something Wrong'),
                 ),
               _ => const Center(
                   child: CircularProgressIndicator(),

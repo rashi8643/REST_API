@@ -35,7 +35,8 @@ class ObjectboxEntityModel {
 const link = 'https://dummy.restapiexample.com/api/v1/employees';
 
 class EmployeeObjectBoxRepository {
-  Future<List<ObjectboxEntityModel>> getData() async {
+  ///add data from object box
+  Future<List<ObjectboxEntityModel>> addData() async {
     final box = EmployeeObjectBox.instance.employeeModelBox;
     try {
       final dio = Dio();
@@ -48,7 +49,7 @@ class EmployeeObjectBoxRepository {
         for (final result in data['data']) {
           final model = ObjectboxEntityModel.fromJson(result);
           details.add(model);
-          await box.put(model);
+          box.put(model);
         }
         return details;
       } else {
@@ -57,5 +58,29 @@ class EmployeeObjectBoxRepository {
     } on Exception catch (_) {
       rethrow;
     }
+  }
+
+  ///get data
+  Future<List<ObjectboxEntityModel>> getDataFromBox() async {
+    final box = EmployeeObjectBox.instance.employeeModelBox;
+    final dataFromLocalStorage = box.getAll();
+
+    if (dataFromLocalStorage.isEmpty) {
+      return await addData();
+    } else {
+      return dataFromLocalStorage;
+    }
+  }
+
+  ///remove data
+  Future<void> deleteData(ObjectboxEntityModel model) async {
+    final box = EmployeeObjectBox.instance.employeeModelBox;
+    box.remove(model.id);
+  }
+
+  ///update data
+  Future<void> updateData(ObjectboxEntityModel model) async {
+    final box = EmployeeObjectBox.instance.employeeModelBox;
+    box.put(model);
   }
 }
